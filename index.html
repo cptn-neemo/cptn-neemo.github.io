@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./css/main.css">
+
+
+    <script>
+        var battalions;
+
+        $.getJSON('https://api.myjson.com/bins/ux6tx', function(data) {
+            battalions = data;  
+        });
+
+    </script>
+
+</head>
+<body>
+
+    <div class = "container-fluid" id = "top">
+    
+            <h1>Capital One Software Engineering Summit</h1>
+            <h3>Max Huddleston</h3>
+    
+            <nav class="navbar navbar-expand navbar-light">
+                    <ul class = "navbar navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="./index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="./battalion.html">Battalions</a>
+                        </li>
+                        <li class="nav-item">
+                                <a class="nav-link" href="./map.html">Map</a>
+                        </li>
+                        <li class = "nav-item">
+                            <a class="nav-link" href="./address_predictor.html">Dispatch Predictor</a>
+                        </li>
+                    </ul>
+            </nav>
+                
+    </div>
+
+    <div class = "row justify-content-center jumbo-container">
+        <div class = "col-7">
+            <div class = "jumbotron">
+                <h1 class = "display-4">San Francisco Dispatches</h1>
+                <p class = "lead">With an increase in population comes a surge of incoming emergency calls. 
+                    These calls can be analyzed, helping city officials better prepare for an emergency situation.  
+                </p>
+                <hr class = "my-4">
+                <p class = "lead">Under the Battalions tab, I have created some visuals to describe the data based on the ten battalions, or emergency response districts, of San Francisco.</p>
+                <hr class = "my-4">
+                <p class = "lead">In the map section, I created a heatmap of the given 10,000 dispatches to identify the hot spots of emergency calls, which can be sorted based on type.</p>
+                <hr class = "my-4">
+                <p class = "lead">Finally, under the Disptach Predictor tab, enter a time and address to predict what type of emergency dispatch would be required.</p>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

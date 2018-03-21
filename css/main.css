@@ -1,0 +1,28 @@
+html, body {
+    background-color: #d4d8dd;
+}
+body {
+    margin: 0;
+}
+
+.container-fluid { 
+    padding: 0px;
+}
+
+.navbar {
+    margin-top: 0px;
+    margin:0px;
+    background-color: #adadad;
+}
+
+#top {
+    background-color: #6d6d6d;
+    text-align: center;
+    font-size: 30;
+    margin-bottom: 0;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+}

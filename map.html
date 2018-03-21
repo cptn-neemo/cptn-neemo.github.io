@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+            * element that contains the map. */
+        #map {
+            height: 100%;
+        }
+        /* Optional: Makes the sample page fill the window. */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase-database.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/map.css">
+
+    <script src = "./js/map.js"></script>
+    <script src = "./js/address.js"></script>
+    <script>
+        var clearMap;
+        var curHeatMap = false;
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyBkpYNnHgJPc7GTrtKzgpCKnR2NvpFYh4s",
+            authDomain: "capital-one-submission.firebaseapp.com",
+            databaseURL: "https://capital-one-submission.firebaseio.com",
+            projectId: "capital-one-submission",
+            storageBucket: "capital-one-submission.appspot.com",
+            messagingSenderId: "716665177178"
+        };
+        
+        firebase.initializeApp(config);
+
+        var database = firebase.database();
+
+        var dispatches;
+        var loaded;
+        firebase.database().ref('/').once('value').then(function(snapshot) {
+            dispatches = snapshot.val();
+            getData();
+        });
+    </script>
+    <script>
+        function initialize() {
+            initMap();
+        }
+
+        var slider = document.getElementById("hourSlider");
+
+        slider.onchange = function() {
+            console.log('herro');
+        }
+    </script>
+
+</head>
+<body>
+
+    <div class = "container-fluid" id = "top">
+    
+        <h1>Capital One Software Engineering Summit</h1>
+        <h3>Max Huddleston</h3>
+
+        <nav class="navbar navbar-expand navbar-light">
+                <ul class = "navbar navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="./battalion.html">Battalions</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="./map.html">Map</a>
+                    </li>
+                    <li class = "nav-item">
+                        <a class="nav-link" href="./address_predictor.html">Dispatch Predictor</a>
+                    </li>
+                </ul>
+        </nav>
+                
+    </div>
+
+    <div class = "container-fluid">
+        <h1 style = "text-align: center; margin-top:2%;">Dispatches in San Francisco</h1>
+        <div class = "row justify-content-center" style = "margin-top: 0; margin-bottom:5%">
+            <div class="col-6 d-flex">
+                <div id = "map" value = "false"></div>
+            </div>
+            <div class = "col-6">
+                <div class = "row">
+                    <div class = "btn-group-vertical col-6">
+                        <h1>Options</h1>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" onclick="onAllClick()" id="allCheckbox">
+                            <label class="form-check-label" for="allCheckbox">All</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="medicalCheckbox">
+                            <label class="form-check-label" for="medicalCheckbox">Medical Incidents</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="trafficCheckbox">
+                            <label class="form-check-label" for="trafficCheckbox">Traffic Collisions</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="fireCheckbox">
+                            <label class="form-check-label" for="fireCheckbox">Fires</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="alarmCheckbox">
+                            <label class="form-check-label" for="alarmCheckbox">Alarms</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="otherCheckbox">
+                            <label class="form-check-label" for="otherCheckbox">Other</label>
+                        </div>
+
+                        <button class = "btn btn-success" onclick="toggleHeatMap()">Toggle Heatmap</button>
+                    </div>
+                
+                    <div class = "col-6">
+                        <h1>Instructions</h1>
+                        <p>This heatmap displays the distribution of dispatches in the city of San Francisco. Click the checkboxes to choose which dispatches to see, then toggle the heatmap.</p>
+                    </div>
+                </div>
+
+
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUTCQV_cW4Au-3run5FUQ2kUJ7JAzXj9c&callback=initialize&libraries=visualization,places"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>

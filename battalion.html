@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/battalion.css">
+    <link rel="stylesheet" href="./css/address_predictor.css">
+    <link rel="stylesheet" href="./css/main.css">
+
+
+    <script src="./js/battalion.js"></script>
+
+    <script>
+        var battalions;
+
+        $.getJSON('https://api.myjson.com/bins/ux6tx').then(function(data) {
+            battalions = data;
+            initValues();
+            initVisuals();
+        });
+    </script>
+</head>
+<body>
+
+    <div class = "container-fluid" id = "top">
+    
+        <h1>Capital One Software Engineering Summit</h1>
+        <h3>Max Huddleston</h3>
+
+        <nav class="navbar navbar-expand navbar-light">
+                <ul class = "navbar navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="./index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="./battalion.html">Battalions</a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="./map.html">Map</a>
+                    </li>
+                    <li class = "nav-item">
+                        <a class="nav-link" href="./address_predictor.html">Dispatch Predictor</a>
+                    </li>
+                </ul>
+        </nav>
+            
+    </div>
+
+    <div class = "container-fluid row justify-content-center info-container">
+        <div class = "col-7">
+            <div class = "card" style = "width: 100%">
+                <div class = "card-body">
+                    <h2 class = "card-title">Which areas take the longest time to dispatch to on average?</h2>
+                    <hr class = "my-2">
+                    <canvas id = "dis_avg_chart"></canvas>
+                    <hr class = "my-2">
+                    <p style="margin-top: 2%">Testing the paragraph</p>
+                </div>
+            </div>
+
+            <div class = "card" style="width:100%;margin-top: 5%;">
+                <div class = "card-body">
+                    <h2 class = "card-title">Total Dispatch Counts</h2>
+                    <hr class = "my-2">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn" id="countButton" onclick="toggleCtMinBarChart()">Counts</button>
+                        <button type="button" class="btn" id="minuteButton" disabled = "true" onclick="toggleCtMinBarChart()">Minutes</button>
+                    </div>
+                    <canvas id = "dis_counts_bar"></canvas>              
+                </div>
+            </div>
+
+            <div class = "card" style = "width: 100%; margin-top: 5%;margin-bottom:5%">
+                <div class = "card-body" style="height: 50%;">
+                    <h2 class = "card-title">Breakdown of Dispatch Counts</h2>
+                    <hr class = "my-2">
+                    <h3>Use the slider to choose a battalion</h3>
+                    <h3 id = "battalion_num">Battlion: 5</h3>
+                    <div style = "width: 100%">
+                        <input type="range" min="1" max="10" value="5"
+                            onchange="onSliderChange(this.value);" oninput="showVal(this.value)" class="slider" id="batSlider">
+                    </div>
+                    <hr class = "my-2">
+                    <h1 id="total_count"></h1>
+                    <div class = "row justify-content-center">
+                        <div class = "col-7">
+                            <canvas id="dis_counts_chart" class = "canvas"></canvas>
+                        </div>
+                    </div>
+                    <hr class = "my-2">
+                    <div class = "row" style="padding-top:3%">
+                        <div class = "col-4" style="color:#3e95cd">
+                            <h3 id = "med_counts">Medical</h3>
+                        </div>
+                        <div class = "col-4" style="color: #8e5ea2">
+                            <h3 id = "fire_counts">Fire</h3>
+                        </div>
+                        <div class = "col-4" style="color:#3cba9f">
+                            <h3 id = "traf_counts">Traffic</h3>
+                        </div>
+                        <div class = "col-4" style="color: #e8c3b9">
+                                <h3 id = "alarm_counts">Alarm</h3>
+                        </div>
+                        <div class = "col-4" style="color: #c45850">
+                            <h3 id = "other_counts">Other</h3>
+                        </div>
+                    </div>     
+                </div>
+            </div>
+
+            <div class = "card" style="margin-top:3%;margin-bottom:3%;">
+                <div class = "card-body">
+                    <h3>Dispatch Day Counts</h3>
+                    <hr class = "my-2">
+                    <canvas id = "dispatchDayCountsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
