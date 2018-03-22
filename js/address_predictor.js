@@ -197,13 +197,14 @@ function initMap(loc) {
 
     var address_marker = new google.maps.Marker({
         position: {lat: aLat, lng: aLng},
-        map: map
+        map: map,
+        icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
     });
 
     var station_marker = new google.maps.Marker({
         position: {lat: sLat, lng: sLng},
         map: map,
-        icon: firetruck
+        icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
     });
     
     var line = new google.maps.Polyline({
