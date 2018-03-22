@@ -1,5 +1,6 @@
 var battalions;
 var stations;
+var closestStation;
 initVars();
 
 
@@ -57,8 +58,9 @@ function geocodeAddress(geocoder) {
         geocoder.geocode({'address': address, 'bounds':bounds}, function(results, status) {
             if (status === 'OK') {
                 displayStats(results);
+                initMap(results[0]);
             } else {
-            alert('Geocode was not successful for the following reason: ' + status);
+            alert('Geocode was not successful. Either an incorrect address was entered, or the address is not in the San Francisco area.');
             }
         });
     }
@@ -92,7 +94,7 @@ function displayStats(results) {
 }
 
 function findBattalion(geodata) {
-    var closestStation = 1;
+    closestStation = 1;
     var loc = geodata.geometry.location;
     var closestDistance = 10;
 
@@ -172,4 +174,43 @@ function getSize(obj) {
         if (obj.hasOwnProperty(key)) size++;
     }
     return size;
+}
+
+function initMap(loc) {
+    var firetruck = "../images/firetruck.jpg";
+    var station = stations[closestStation];
+
+    sLat = station[0];
+    sLng = station[1];
+    aLat  = loc.geometry.location.lat();
+    aLng = loc.geometry.location.lng();
+
+    var path = [
+        {lat: sLat, lng: sLng},
+        {lat: aLat, lng: aLng},
+    ]
+
+    var map = new google.maps.Map(document.getElementById('marker_map'), {
+        center: {lat: aLat, lng: aLng},
+        zoom: 12
+    });
+
+    var address_marker = new google.maps.Marker({
+        position: {lat: aLat, lng: aLng},
+        map: map
+    });
+
+    var station_marker = new google.maps.Marker({
+        position: {lat: sLat, lng: sLng},
+        map: map,
+        icon: firetruck
+    });
+    
+    var line = new google.maps.Polyline({
+        path: path,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
+    }).setMap(map);
 }

@@ -41,7 +41,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="./index.html">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="background-color: #4d4d4d">
                             <a class="nav-link" href="./battalion.html">Battalions</a>
                     </li>
                     <li class="nav-item">
@@ -63,7 +63,12 @@
                     <hr class = "my-2">
                     <canvas id = "dis_avg_chart"></canvas>
                     <hr class = "my-2">
-                    <p style="margin-top: 2%">Testing the paragraph</p>
+                    <p class="lead" style="margin-top: 2%">
+                        I measured average dispatch time by taking the time the dispatched unit arrived on scene and subtracting the time the dispatch call was received.
+                        From this data, we can see that Battalion 3, 8, 9, and 10 have significantly higher average dispatch times compared to the others. This could be due
+                        to a rapid increase of population and the battalions are getting swamped. In order to reduce these times, an additional battalion could be created, or more 
+                        emergency response officials could be hired.
+                    </p>
                 </div>
             </div>
 
@@ -75,7 +80,12 @@
                         <button type="button" class="btn" id="countButton" onclick="toggleCtMinBarChart()">Counts</button>
                         <button type="button" class="btn" id="minuteButton" disabled = "true" onclick="toggleCtMinBarChart()">Minutes</button>
                     </div>
-                    <canvas id = "dis_counts_bar"></canvas>              
+                    <canvas id = "dis_counts_bar"></canvas>    
+                    <hr class = "my-2">
+                    <p class="lead">
+                        One metric from this graph that I find interesting is the huge difference in the amount of dispatches between Battlion 1, Battalion 2, and the others.
+                        Battalion 1 and Battalion 2 have almost twice the amount of dispatches compared to the other battalions, which could be indicitive of a bad neighborhood or area.
+                    </p>          
                 </div>
             </div>
 
@@ -107,13 +117,18 @@
                         <div class = "col-4" style="color:#3cba9f">
                             <h3 id = "traf_counts">Traffic</h3>
                         </div>
-                        <div class = "col-4" style="color: #e8c3b9">
+                        <div class = "col-4" style="color: #c03095">
                                 <h3 id = "alarm_counts">Alarm</h3>
                         </div>
                         <div class = "col-4" style="color: #c45850">
                             <h3 id = "other_counts">Other</h3>
                         </div>
-                    </div>     
+                    </div> 
+                    <hr class = "my-2">
+                    <p class="lead">
+                        Medical Incidents compose of approximately 65% of the battalions' dispatches. Battalions 1 and 3 both have a very high percentage of alarms, 
+                        and both of them have some of the highest counts of dispatches.
+                    </p>    
                 </div>
             </div>
 
@@ -122,6 +137,11 @@
                     <h3>Dispatch Day Counts</h3>
                     <hr class = "my-2">
                     <canvas id = "dispatchDayCountsChart"></canvas>
+                    <hr class="my-2">
+                    <p class="lead">
+                        January 13th, 2018 was a Saturday and the dataset ended on January 24th, a Wednesday. The peaks of the counts seem to be centered on Saturday-Monday
+                        and dip during the middle of the week.
+                    </p>
                 </div>
             </div>
         </div>

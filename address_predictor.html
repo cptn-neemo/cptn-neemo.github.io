@@ -49,7 +49,7 @@
                         <li class="nav-item">
                                 <a class="nav-link" href="./map.html">Map</a>
                         </li>
-                        <li class = "nav-item">
+                        <li class = "nav-item" style="background-color: #4d4d4d">
                             <a class="nav-link" href="./address_predictor.html">Dispatch Predictor</a>
                         </li>
                     </ul>
@@ -62,7 +62,29 @@
         <div class = "row justify-content-center" style = "margin-top: 0;">
             <div class = "col-7">
                 <div class = "address-container">
-                    <p>Enter an address, and choose a time with the slider to predict what type of dispatch you might need!</p>
+                    <p>Enter an address, and choose a time with the slider to predict what type of dispatch is most likely to be required for your location at the given time.</p>
+                    <hr class = "my-2">
+                    <div class = "row">
+                        <div class = "col-6">
+                            <h3>Examples</h3>
+                            <p>Some example addresses that you might choose: <br><br> 
+                                112 7th St San Francisco, CA 94103<br>
+                                    Results at 6:00 AM show a 10.30% chance of a fire <br><br>
+                                260 Eddy St San Francisco, CA 94102 <br>
+                                    Results at 8:00 PM show a 9.00% chance of an alarm
+                            </p>
+                        </div>
+                        <div class = "col-6">
+                            <h3>How it works</h3>
+                            <p>First, the address entered is geocoded into it's corresponding latitude and longitude.
+                                Then it is compared to the 46 emergency response stations in San Francisco, finding the closest one.
+                                Finally, it finds the battalion the station is a part of and returns the probabilities for the given time.
+                            </p>
+                        </div>
+                    </div>
+
+                    <hr class="my-2">
+
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon3">Address</span>
@@ -78,19 +100,24 @@
                     </div>
                     <button id = "submitButton" class = "btn btn-success find-button">Find Dispatch</button>
                 </div>
-
-                <div id = "probability-card" class = "card probability-card">
-                    <div class = "card-header">
-                        <h3 class = "card-title">Predicted Dispatch</h3>
+                <div class = "row">
+                    <div id = "probability-card" class = "card probability-card col-6" style="margin-bottom:3%">
+                        <div class = "card-body">                       
+                            <h3 class = "card-title">Predicted Dispatch</h3>
+                            <hr class = "my-2">
+                            <h5 id = "likely1">Prob 1</h5>
+                            <h5 id = "likely2">Prob 2</h5>
+                            <h5 id = "likely3">Prob 3</h5>
+                            <h5 id = "likely4">Prob 4</h5>
+                            <h5 id = "likely5">Prob 5</h5>
+                        </div>
                     </div>
-                    <div class = "card-body">
-                        <h5 id = "likely1">Prob 1</h5>
-                        <h5 id = "likely2">Prob 2</h5>
-                        <h5 id = "likely3">Prob 3</h5>
-                        <h5 id = "likely4">Prob 4</h5>
-                        <h5 id = "likely5">Prob 5</h5>
+
+                    <div class="col-6">
+                        <div id = "marker_map" style="height:50vh;"></div>"
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

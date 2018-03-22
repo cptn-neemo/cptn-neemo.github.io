@@ -1,3 +1,5 @@
+var curHeatMapData;
+var allFalse = true;
 
 function onAllClick() {
     $('#medicalCheckbox').prop('checked', false);
@@ -5,10 +7,12 @@ function onAllClick() {
     $('#fireCheckbox').prop('checked', false);
     $('#alarmCheckbox').prop('checked', false);
     $('#otherCheckbox').prop('checked', false);
+    toggleHeatMap();
 }
 
 function onOtherClick() {
     $('#allCheckbox').prop('checked', false);
+    toggleHeatMap();
 }
 
 function isFire(val) {
@@ -47,7 +51,7 @@ function getData() {
             heatMapData.push(new google.maps.LatLng(val.lat, val.long))
         }
     }
-    console.log('setting data');
+
     heatmap.setData(heatMapData);
     loaded = true;
 
@@ -63,7 +67,6 @@ function initMap() {
     heatmap = new google.maps.visualization.HeatmapLayer({
         map: null
     });
-    console.log(heatmap);
 }
 
 function getCheckedOptions() {
@@ -78,20 +81,20 @@ function getCheckedOptions() {
     curChecked.push($('#otherCheckbox').is(':checked'));
 
     //Check to see if any are true. If one is true, then we don't want to clear the heatmap
-    for (i = 0; i < curChecked.length; i++) {
-        if (curChecked[i])
-            clearMap = false;
-    }
+    allFalse = !(curChecked[0] || curChecked[1] || curChecked[2] || curChecked[3] || curChecked[4] 
+        || curChecked[5]);
 
     return curChecked;
 }
-
 function toggleHeatMap() {
+
     getCheckedOptions();
+    
+    if (allFalse)
+        heatmap.setMap(null)
+    else {
+        curHeatMapData = [];
 
-    curHeatMapData = [];
-
-    if (!clearMap) {
         if (curChecked[0]) {
             curHeatMapData = heatMapData.slice(0);
         } else {
@@ -103,8 +106,6 @@ function toggleHeatMap() {
         }
 
         heatmap.setMap(map);
-    } else {
-        heatmap.setMap(null);
+        heatmap.setData(curHeatMapData);
     }
-    heatmap.setData(curHeatMapData);
 }

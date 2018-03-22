@@ -164,9 +164,9 @@ function renderDispatchCountChart(bat_number) {
         data: {
           labels: ["Medical Incident", "Fire", "Traffic Collision", "Alarms", "Other"],
           datasets: [
-            {
+            {                
               label: "Type",
-              backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+              backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#c03095","#c45850"],
               data: counts
             }
           ]
@@ -215,7 +215,31 @@ function renderDayCountChart(top_unit_counts) {
                 fill: false
             }]
         },
-        options: {}
+        options: {
+            elements: {
+                line: {
+                    tension: 0, // disables bezier curves
+                }
+            },
+            scales: {
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Dates",
+                        fontSize: 14,
+                        fontColor: '#000000'
+                    }
+                }],
+                yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: "Count",
+                        fontSize: 14,
+                        fontColor: '#000000'
+                    }
+                }]
+            }
+        }
     });
 }
 function onSliderChange(val) {

@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="./css/map.css">
 
     <script src = "./js/map.js"></script>
-    <script src = "./js/address.js"></script>
+    
     <script>
         var clearMap;
         var curHeatMap = false;
@@ -57,12 +57,6 @@
         function initialize() {
             initMap();
         }
-
-        var slider = document.getElementById("hourSlider");
-
-        slider.onchange = function() {
-            console.log('herro');
-        }
     </script>
 
 </head>
@@ -81,7 +75,7 @@
                     <li class="nav-item">
                             <a class="nav-link" href="./battalion.html">Battalions</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="background-color: #4d4d4d">
                             <a class="nav-link" href="./map.html">Map</a>
                     </li>
                     <li class = "nav-item">
@@ -126,13 +120,11 @@
                             <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="otherCheckbox">
                             <label class="form-check-label" for="otherCheckbox">Other</label>
                         </div>
-
-                        <button class = "btn btn-success" onclick="toggleHeatMap()">Toggle Heatmap</button>
                     </div>
                 
                     <div class = "col-6">
                         <h1>Instructions</h1>
-                        <p>This heatmap displays the distribution of dispatches in the city of San Francisco. Click the checkboxes to choose which dispatches to see, then toggle the heatmap.</p>
+                        <p>This heatmap displays the distribution of dispatches in the city of San Francisco. Click the checkboxes to choose which type of dispatches to display.</p>
                     </div>
                 </div>
 
