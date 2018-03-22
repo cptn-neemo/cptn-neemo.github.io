@@ -47,12 +47,15 @@
         var database = firebase.database();
 
         var dispatches;
-        var loaded;
+        var loaded = false;
+
         firebase.database().ref('/').once('value').then(function(snapshot) {
             dispatches = snapshot.val();
+            initOptions();
             getData();
         });
 
+        //GET requests were clearing the page's title
         document.title = "Map";
     </script>
     <script>
@@ -96,31 +99,33 @@
             </div>
             <div class = "col-6">
                 <div class = "row">
-                    <div class = "btn-group-vertical col-6">
-                        <h1>Options</h1>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" onclick="onAllClick()" id="allCheckbox">
-                            <label class="form-check-label" for="allCheckbox">All</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="medicalCheckbox">
-                            <label class="form-check-label" for="medicalCheckbox">Medical Incidents</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="trafficCheckbox">
-                            <label class="form-check-label" for="trafficCheckbox">Traffic Collisions</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="fireCheckbox">
-                            <label class="form-check-label" for="fireCheckbox">Fires</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="alarmCheckbox">
-                            <label class="form-check-label" for="alarmCheckbox">Alarms</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="otherCheckbox">
-                            <label class="form-check-label" for="otherCheckbox">Other</label>
+                    <div class = "col-6">
+                        <h1 id = "loadOptions">Loading...</h1>
+                        <div class = "btn-group-vertical" id="options" style="visibility:hidden">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" onclick="onAllClick()" id="allCheckbox">
+                                <label class="form-check-label" for="allCheckbox">All</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="medicalCheckbox">
+                                <label class="form-check-label" for="medicalCheckbox">Medical Incidents</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="trafficCheckbox">
+                                <label class="form-check-label" for="trafficCheckbox">Traffic Collisions</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="fireCheckbox">
+                                <label class="form-check-label" for="fireCheckbox">Fires</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="alarmCheckbox">
+                                <label class="form-check-label" for="alarmCheckbox">Alarms</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" onclick = "onOtherClick()" type="checkbox" id="otherCheckbox">
+                                <label class="form-check-label" for="otherCheckbox">Other</label>
+                            </div>
                         </div>
                     </div>
                 

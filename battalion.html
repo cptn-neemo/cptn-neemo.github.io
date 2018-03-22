@@ -25,7 +25,10 @@
         var battalions;
 
         $.getJSON('https://api.myjson.com/bins/ux6tx').then(function(data) {
+            //getJSON was clearing the page's title
             document.title = "Battalions";
+            
+
             battalions = data;
             initValues();
             initVisuals();

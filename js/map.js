@@ -3,6 +3,15 @@ var curHeatMapData;
 //True if all of the options are unchecked
 var allFalse = true;
 
+/**
+ * Initialize the options. This is called once the data is loaded
+ */
+function initOptions() {
+    $('#loadOptions').text('Options');
+    document.getElementById('options').style.visibility = "visible";
+    console.log('in options');
+}
+
 /*
  * When the all option is clicked, uncheck the other options
 */
