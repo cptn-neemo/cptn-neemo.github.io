@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Battalions</title>
 
 
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -17,6 +16,8 @@
     <link rel="stylesheet" href="./css/address_predictor.css">
     <link rel="stylesheet" href="./css/main.css">
 
+    <title>Battalions</title>
+
 
     <script src="./js/battalion.js"></script>
 
@@ -24,10 +25,13 @@
         var battalions;
 
         $.getJSON('https://api.myjson.com/bins/ux6tx').then(function(data) {
+            document.title = "Battalions";
             battalions = data;
             initValues();
             initVisuals();
         });
+
+
     </script>
 </head>
 <body>
