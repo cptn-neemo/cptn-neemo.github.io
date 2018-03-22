@@ -1,6 +1,11 @@
+//The current heat map data
 var curHeatMapData;
+//True if all of the options are unchecked
 var allFalse = true;
 
+/*
+ * When the all option is clicked, uncheck the other options
+*/
 function onAllClick() {
     $('#medicalCheckbox').prop('checked', false);
     $('#trafficCheckbox').prop('checked', false);
@@ -10,22 +15,32 @@ function onAllClick() {
     toggleHeatMap();
 }
 
+/*
+ * When a checkbox other than All is clicked, uncheck All
+*/
 function onOtherClick() {
     $('#allCheckbox').prop('checked', false);
     toggleHeatMap();
 }
 
-function isFire(val) {
-    if (val.type == 'Fire' || val.type == 'Structure Fire' ||
-        val.type == 'Outside Fire' || val.type == 'Vehicle Fire')
+/*
+ * Classify every type of Fire into one category
+ * @param dispatch: dispatch object
+*/
+function isFire(dispatch) {
+    if (dispatch.type == 'Fire' || dispatch.type == 'Structure Fire' ||
+        dispatch.type == 'Outside Fire' || dispatch.type == 'Vehicle Fire')
         return true;
     else 
         return false;
 }
 
+/*
+ * Get and set the various variables used to describe the dispatches
+*/
 function getData() {
 
-                  
+    //All of the different types of categories
     heatMapData = [];
     medicalData = [];
     alarmData = [];
@@ -33,30 +48,33 @@ function getData() {
     trafficData = [];
     otherData = [];
 
-    for (var dispatch in dispatches) {
-        if (dispatches.hasOwnProperty(dispatch)) {
-            var val = dispatches[dispatch];
+    //Set the data arrays
+    for (var key in dispatches) {
+        if (dispatches.hasOwnProperty(key)) {
+            var dispatch = dispatches[key];
 
-            if (val.type == 'Medical Incident')
-                medicalData.push(new google.maps.LatLng(val.lat, val.long));
-            else if (isFire(val))
-                fireData.push(new google.maps.LatLng(val.lat, val.long));     
-            else if (val.type == 'Traffic Collision')
-                trafficData.push(new google.maps.LatLng(val.lat, val.long));
-            else if (val.type ==  'Alarms')
-                alarmData.push(new google.maps.LatLng(val.lat, val.long));
+            if (dispatch.type == 'Medical Incident')
+                medicalData.push(new google.maps.LatLng(dispatch.lat, dispatch.long));
+            else if (isFire(dispatch))
+                fireData.push(new google.maps.LatLng(dispatch.lat, dispatch.long));     
+            else if (dispatch.type == 'Traffic Collision')
+                trafficData.push(new google.maps.LatLng(dispatch.lat, dispatch.long));
+            else if (dispatch.type ==  'Alarms')
+                alarmData.push(new google.maps.LatLng(dispatch.lat, dispatch.long));
             else
-                otherData.push(new google.maps.LatLng(val.lat, val.long));
+                otherData.push(new google.maps.LatLng(dispatch.lat, dispatch.long));
                 
-            heatMapData.push(new google.maps.LatLng(val.lat, val.long))
+            heatMapData.push(new google.maps.LatLng(dispatch.lat, dispatch.long))
         }
     }
 
     heatmap.setData(heatMapData);
     loaded = true;
-
 }
 
+/*
+ * Initialize the map
+*/
 function initMap() {
 
     map = new google.maps.Map(document.getElementById('map'), {
@@ -69,9 +87,11 @@ function initMap() {
     });
 }
 
+/*
+ * Get all of the checked options
+*/
 function getCheckedOptions() {
     curChecked = [];
-    clearMap = true;
 
     curChecked.push($('#allCheckbox').is(':checked'));
     curChecked.push($('#medicalCheckbox').is(':checked'));
@@ -86,6 +106,10 @@ function getCheckedOptions() {
 
     return curChecked;
 }
+
+/*
+ * Toggle the heatmap based on the options inputed
+*/
 function toggleHeatMap() {
 
     getCheckedOptions();

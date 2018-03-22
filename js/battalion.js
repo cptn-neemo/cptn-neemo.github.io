@@ -1,7 +1,9 @@
+//Set up global variables for the charts and data
 var dispatch_avgs, battalion_numbers, battalion_dispatch_counts, thePieChart, hasRendered;
 var total_counts, total_min_counts, dispatch_ct_min_bar;
 var chartIsCount = false;
 
+//The day counts for the line graph
 var day_counts = {
     "2018-01-13": 783,
     "2018-01-14": 831,
@@ -17,17 +19,38 @@ var day_counts = {
     "2018-01-24": 837
 }
 
+/*
+ * Initialize global variables after the getJSON call is finished
+*/
+function initValues() {
+    total_counts = [];
+    total_min_counts = [];
+
+    for (var key in battalions) {
+        total_counts.push(battalions[key].total_dispatch_count);
+        total_min_counts.push(battalions[key].total_dispatch_minutes);
+    }
+}
+
+/*
+ * Initialize the graphs
+*/
 function initVisuals() {
-    setHighestTime();
+    renderDispatchAvgChart();
     toggleCtMinBarChart();
-    renderDispatchCountChart(0);
+    renderDispatchTypeCountChart(0);
     renderDayCountChart();
     hasRendered = true;
 }
 
-function setHighestTime() {
+/*
+ * Render the Dispatch Average bar chart
+*/
+function renderDispatchAvgChart() {
+    //Get the context of the canvas element
     var ctx = document.getElementById('dis_avg_chart').getContext('2d');
 
+    //Dispatch time avgs for each battalion
     dispatch_avgs = [];
     battalion_numbers = [1,2,3,4,5,6,7,8,9,10];
 
@@ -36,6 +59,7 @@ function setHighestTime() {
         dispatch_avgs.push(battalions[key].dispatch_time_avg.toFixed(3));
     }
 
+    //Create the dispatch avg bar chart
     var dispatch_avgs_bar = new Chart(ctx, {
         type: 'bar',
 
@@ -77,31 +101,30 @@ function setHighestTime() {
 
 }
 
-function initValues() {
-    total_counts = [];
-    total_min_counts = [];
-
-    for (var key in battalions) {
-        total_counts.push(battalions[key].total_dispatch_count);
-        total_min_counts.push(battalions[key].total_dispatch_minutes);
-    }
-}
-
+/*
+ * Toggle between total dispatch counts chart and total dispatch minutes chart
+*/
 function toggleCtMinBarChart() {
     chartIsCount = !chartIsCount;
     
     var ctButton = document.getElementById("countButton");
     var minButton = document.getElementById("minuteButton");
 
+    //Invert the buttons
     ctButton.disabled = !ctButton.disabled;
     minButton.disabled = !minButton.disabled;
 
-    chartIsCount ? setCtMinBarChart(total_counts) : setCtMinBarChart(total_min_counts);
+    //Render either the count chart or the minute chart
+    chartIsCount ? renderCntMinBarChart(total_counts) : renderCntMinBarChart(total_min_counts);
 }
 
-function setCtMinBarChart(data) {
+/*
+ * Set
+*/
+function renderCntMinBarChart(data) {
     var ctx = document.getElementById('dis_counts_bar').getContext('2d');
 
+    //Check to see if chart has rendered before, and if so, destroy the previous chart
     if (hasRendered)
         dispatch_ct_min_bar.destroy();
 
@@ -146,16 +169,19 @@ function setCtMinBarChart(data) {
     })
 }
 
-function renderDispatchCountChart(bat_number) {
+/*
+ * Render the dispatch type counts doughnut chart
+ *@param bat_number: the battalion number to render
+*/
+function renderDispatchTypeCountChart(bat_number) {
+
     var counts = battalions["Battalion" + bat_number].dispatch_type_counts;
-    console.log(counts);
-    var sum = 0;
-    for (i = 0; i < counts.length; i++) {
-        sum += counts[i];
-    }
+
+    var total_count = battalions["Battalion" + bat_number].total_dispatch_count;
 
     var disCountChart = document.getElementById("dis_counts_chart");
 
+    //Destroy the previous chart
     if (hasRendered)
         thePieChart.destroy();
 
@@ -180,25 +206,29 @@ function renderDispatchCountChart(bat_number) {
         }
     });
 
-    $('#total_count').text('Total: ' + sum);
-    $('#med_counts').html("Medical: " + counts[0] + '<br/>(' + (counts[0] / sum * 100).toFixed(2) + '%)');
-    $('#fire_counts').html('Fires: ' + counts[1] + '<br/>(' + (counts[1] / sum * 100).toFixed(2) + '%)');
-    $('#traf_counts').html('Traffic: ' + counts[2] + '<br/>(' + (counts[2] / sum * 100).toFixed(2) + '%)')
-    $('#alarm_counts').html('Alarms: ' + counts[3] + '<br/>(' + (counts[3] / sum * 100).toFixed(2) + '%)')
-    $('#other_counts').html('Other: ' + counts[4] + '<br/>(' + (counts[4] / sum * 100).toFixed(2) + '%)')
+    //Set the various key totals
+    $('#total_count').text('Total: ' + total_count);
+    $('#med_counts').html("Medical: " + counts[0] + '<br/>(' + (counts[0] / total_count * 100).toFixed(2) + '%)');
+    $('#fire_counts').html('Fires: ' + counts[1] + '<br/>(' + (counts[1] / total_count * 100).toFixed(2) + '%)');
+    $('#traf_counts').html('Traffic: ' + counts[2] + '<br/>(' + (counts[2] / total_count * 100).toFixed(2) + '%)')
+    $('#alarm_counts').html('Alarms: ' + counts[3] + '<br/>(' + (counts[3] / total_count * 100).toFixed(2) + '%)')
+    $('#other_counts').html('Other: ' + counts[4] + '<br/>(' + (counts[4] / total_count * 100).toFixed(2) + '%)')
 }
 
-function renderDayCountChart(top_unit_counts) {
+/*
+ * Render the dispatch day count chart
+*/
+function renderDayCountChart() {
+    //Day keys
     days = [];
+    //Count values
     counts = [];
 
+    //Split the day_counts into keys and values for the line chart
     for (var day in day_counts) {
         days.push(day);
         counts.push(day_counts[day]);
     }
-
-    console.log(days)
-    console.log(counts)
 
     var ctx = document.getElementById('dispatchDayCountsChart').getContext('2d');
 
@@ -242,12 +272,20 @@ function renderDayCountChart(top_unit_counts) {
         }
     });
 }
-function onSliderChange(val) {
 
+/*
+ * Once the slider is set, then change the doughnut chart to the corresponding battalion
+ *@param val: value of the slider 
+*/
+function onSliderChange(val) {
     $('#battalion_num').text("Battalion: " + val);
-    renderDispatchCountChart(val - 1);
+
+    renderDispatchTypeCountChart(val - 1);
 }
 
+/*
+ * When the slider is changing set the battalion_num text
+*/
 function showVal(val) {
     $('#battalion_num').text("Battalion: " + val);
 }
