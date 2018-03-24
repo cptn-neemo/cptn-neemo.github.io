@@ -52,30 +52,34 @@ function geocodeAddress(geocoder) {
 
     var address = document.getElementById('address').value;
 
-    //Initialize the bounds for the geocoder
+    //Initialize the bounds for the resulting location
     var data = {
         bounds: {
-          west: 37.703021,
-          east: 37.848657,
-          south: -122.536031,
-          north: -122.347089
+          west: -122.536031, 
+          east: -122.347089, 
+          south: 37.703021, 
+          north: 37.848657 
         }
     };
 
-    var bounds = new google.maps.LatLngBounds(
-        new google.maps.LatLng(data.bounds.south, data.bounds.west), 
-        new google.maps.LatLng(data.bounds.north, data.bounds.east));
 
     //Check for a value not being entered in the address field.
     if (address == "")
         alert('Please enter an address in the address field.');
     else {
 
-        geocoder.geocode({'address': address, 'bounds':bounds}, function(results, status) {
+        geocoder.geocode({'address': address}, function(results, status) {
             //If the status was 'OK', then display the panel and initialize the Map
             if (status === 'OK') {
-                displayStats(results);
-                initMap(results[0]);
+                var loc = results[0].geometry.location;
+                //Check to see if the resulting location is in San Francisco
+                if (loc.lat() >= data.bounds.south && loc.lat() <= data.bounds.north
+                    && loc.lng() >= data.bounds.west && loc.lng() <= data.bounds.east) {
+                        displayStats(results);
+                        initMap(results[0]);
+                } else {
+                    alert('Geocode was not successful. Either an incorrect address was entered, or the address is not in the San Francisco area.');
+                }
             } else {
                 alert('Geocode was not successful. Either an incorrect address was entered, or the address is not in the San Francisco area.');
             }
@@ -247,4 +251,5 @@ function initMap(loc) {
         strokeOpacity: 1.0,
         strokeWeight: 2
     }).setMap(map);
+
 }
